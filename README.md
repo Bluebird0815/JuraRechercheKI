@@ -5,6 +5,8 @@ Alle Dateien werden als Links sowie ein Literatur-Überblick als .txt im gewähl
 
 JuraRechercheKI ist in der BETA-Version und soll vor allem die Innovationspotenziale in der Rechtswissenschaft aufzeigen, wie sie dargelegt wurden in der Abhandlung ZGE 17 (2025), 1 (https://www.mohrsiebeck.com/artikel/das-urheberrecht-als-kiinnovationsbremse-in-der-rechtswissenschaft-101628zge-2025-0002/).
 
+![Screenshot](assets/Screenshot1.PNG)
+
 **Hintergrund des Tools**
 Das Tool will den Einsatz von KI-gestützter Recherche in der Rechtswissenschaft allen ermöglichen, die bereits Zugriff auf die unterstützten juristischen Portale haben.
 
@@ -69,6 +71,8 @@ Zwischen jeder Abfrage liegen mehrere Sekunden, um ein schonendes Crawling siche
 	c. Sodann fragt das Tool alle Links aus den Suchergebnissen (1-2 Suchergebnisseiten) ab und fordert vom KI-System eine Einschätzung der Relevanz sowie der relevanten Fußnoten an. Der Link zum Beitrag und die Relevanzeinschätzung werden gespeichert. Die Fußnoten werden ebenfalls in die Liste der weiteren Ergebnisse aufgenommen, soweit die Fundstelle/Zeitschrift einem Portal zugeordnet werden kann.
 	d. "Noch verbleibend" kann zu Beginn geringer sein als das "Limit an Beiträgen". Erst wenn mehr und mehr Fußnoten ausgewertet und aufgenommen werden, steigt der Wert bis zum eingebenen Limit an Beiträgen.
 
+![Screenshot](assets/Screenshot2.PNG)
+
 **Einsatz des Tools: Kurzantwort**
 1. Vor dem Einsatz: Einwahl in das jeweilige Universitäts-VPN
 2. Tool starten
@@ -78,3 +82,5 @@ Zwischen jeder Abfrage liegen mehrere Sekunden, um ein schonendes Crawling siche
 	b. Die Suche wird durchgeführt.
 	c. Der Text aus dem ersten Suchergebnis (d.h. ein Beitrag) wird an das KI-System übergeben.
 	d. Das KI-System gibt eine Antwort unter Berücksichtigung des Beitrags (oder ohne, sofern kein passender gefunden werden konnte) zurück.
+
+![Screenshot](assets/Screenshot3.PNG)
