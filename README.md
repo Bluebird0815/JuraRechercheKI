@@ -5,10 +5,10 @@ Alle Dateien werden als Links sowie ein Literatur-Überblick als .txt im gewähl
 
 JuraRechercheKI ist in der BETA-Version und soll vor allem die Innovationspotenziale in der Rechtswissenschaft aufzeigen, wie sie dargelegt wurden in der Abhandlung ZGE 17 (2025), 1 (https://www.mohrsiebeck.com/artikel/das-urheberrecht-als-kiinnovationsbremse-in-der-rechtswissenschaft-101628zge-2025-0002/).
 
-** Hintergrund des Tools **
+**Hintergrund des Tools**
 Das Tool will den Einsatz von KI-gestützter Recherche in der Rechtswissenschaft allen ermöglichen, die bereits Zugriff auf die unterstützten juristischen Portale haben.
 
-** Beachtung des Urheberrechts (s. hierzu ZGE 17 (2025), 1) **
+**Beachtung des Urheberrechts (s. hierzu ZGE 17 (2025), 1)**
 Das deutsche Urheberrecht erlaubt Text und Data Mining für wissenschaftliche Forschungszwecke (§ 60d UrhG) und darf nicht durch technische Schutzmaßnahmen vereitelt werden (§ 95 Abs. 1 Nr. 11 UrhG). Für kommerzielle Zwecke gelten Einschränkungen (§ 44b UrhG).
 
 JuraRechercheKI selbst legt keine dauerhaften Vervielfältigungen an. Es benötigt im Einsatz nur temporäre Vervielfältigungen und legt lediglich Links zu den jeweiligen Dokumenten dauerhaft im Projektordner ab. Abhängig davon, welche KI-Schnittstelle zum Einsatz kommt, kann es zu weiteren, dauerhaften Vervielfältigungen kommen.
@@ -17,7 +17,7 @@ Das Tool ist vor diesem Hintergrund nur für wissenschaftliche Forschungszwecke 
 
 Zwischen jeder Abfrage liegen mehrere Sekunden, um ein schonendes Crawling sicherzustellen.
 
-** Installation **
+**Installation**
 1. Code herunterladen und an geeigneter Stelle (z.B. Dokumente) entpacken.
 2. [Python installieren](https://www.python.org/downloads/)
 3. Abhängigkeiten (und Playwright Browser) installieren.
@@ -38,7 +38,7 @@ Zwischen jeder Abfrage liegen mehrere Sekunden, um ein schonendes Crawling siche
 		```
 4. Programm starten
 
-** Einrichtung **
+**Einrichtung**
 1. Tool starten
 2. Es öffnet sich der Tab "Einstellungen". Hier sind anzugeben:
 	a. OpenAI-API-URL: Hier kann jede beliebige URL angegeben werden, die auf Basis der OpenAI-API-Struktur basiert. Das ermöglicht z.B. den lokalen Einsatz von OLlama.
@@ -47,7 +47,7 @@ Zwischen jeder Abfrage liegen mehrere Sekunden, um ein schonendes Crawling siche
 	d. (Optional, benötigt für Google PDF-Suche): Pfad zum Programm Poppler (PDF Verarbeitung), s. https://github.com/oschwartz10612/poppler-windows/releases
 	e. (Optional, benötigt für Google PDF-Suche): Pfad zum Programm Tesseract (OCR), s. https://github.com/UB-Mannheim/tesseract/wiki
 
-** Einsatz des Tools: Recherche **
+**Einsatz des Tools: Recherche**
 1. Vor dem Einsatz: Einwahl in das jeweilige Universitäts-VPN
 2. Tool starten
 3.
@@ -69,7 +69,7 @@ Zwischen jeder Abfrage liegen mehrere Sekunden, um ein schonendes Crawling siche
 	c. Sodann fragt das Tool alle Links aus den Suchergebnissen (1-2 Suchergebnisseiten) ab und fordert vom KI-System eine Einschätzung der Relevanz sowie der relevanten Fußnoten an. Der Link zum Beitrag und die Relevanzeinschätzung werden gespeichert. Die Fußnoten werden ebenfalls in die Liste der weiteren Ergebnisse aufgenommen, soweit die Fundstelle/Zeitschrift einem Portal zugeordnet werden kann.
 	d. "Noch verbleibend" kann zu Beginn geringer sein als das "Limit an Beiträgen". Erst wenn mehr und mehr Fußnoten ausgewertet und aufgenommen werden, steigt der Wert bis zum eingebenen Limit an Beiträgen.
 
-** Einsatz des Tools: Kurzantwort **
+**Einsatz des Tools: Kurzantwort**
 1. Vor dem Einsatz: Einwahl in das jeweilige Universitäts-VPN
 2. Tool starten
 3. Juristische Fragestellung eingeben, Universität und Portal auswählen.
