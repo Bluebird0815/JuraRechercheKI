@@ -23,15 +23,15 @@ Zwischen jeder Abfrage liegen mehrere Sekunden, um ein schonendes Crawling siche
 1. Code herunterladen und an geeigneter Stelle (z.B. Dokumente) entpacken.
 2. [Python installieren](https://www.python.org/downloads/)
 3. Abhängigkeiten (und Playwright Browser) installieren.
-	a. Windows:
+- Windows:
 	
 		```bash
 		cd pfad
 		pip install -r requirements.txt
 		playwright install chromium
 		```
-		
-	b. Linux
+
+- Linux
 		
 		```bash
 		cd pfad-zum-ordner
@@ -43,33 +43,31 @@ Zwischen jeder Abfrage liegen mehrere Sekunden, um ein schonendes Crawling siche
 **Einrichtung**
 1. Tool starten
 2. Es öffnet sich der Tab "Einstellungen". Hier sind anzugeben:
-	a. OpenAI-API-URL: Hier kann jede beliebige URL angegeben werden, die auf Basis der OpenAI-API-Struktur basiert (endet mit "/v1"). Das ermöglicht z.B. den lokalen Einsatz von Ollama (z.B. http://localhost:11434/v1).
-	b. OpenAI-API-Key: Sofern ein Key benötigt wird, ist er hier anzugeben (z.B. leer zu lassen bei Ollama).
-	c. Proxy-URL: Sofern die jeweilige Universität einen Proxy benötigt, kann dieser hier angegeben werden. Z.B. https://proxy.universitaet.de:8000
-	d. (Optional, benötigt für Google PDF-Suche): Pfad zum Programm Poppler (PDF Verarbeitung), s. https://github.com/oschwartz10612/poppler-windows/releases
-	e. (Optional, benötigt für Google PDF-Suche): Pfad zum Programm Tesseract (OCR), s. https://github.com/UB-Mannheim/tesseract/wiki
+- OpenAI-API-URL: Hier kann jede beliebige URL angegeben werden, die auf Basis der OpenAI-API-Struktur basiert. Das ermöglicht z.B. den lokalen Einsatz von OLlama.
+- OpenAI-API-Key: Sofern ein Key benötigt wird, ist er hier anzugeben.
+- Proxy-URL: Sofern die jeweilige Universität einen Proxy benötigt, kann dieser hier angegeben werden. Z.B. https://proxy.universitaet.de:8000
+- (Optional, benötigt für Google PDF-Suche): Pfad zum Programm Poppler (PDF Verarbeitung), s. https://github.com/oschwartz10612/poppler-windows/releases
+- (Optional, benötigt für Google PDF-Suche): Pfad zum Programm Tesseract (OCR), s. https://github.com/UB-Mannheim/tesseract/wiki
 
 **Einsatz des Tools: Recherche**
 1. Vor dem Einsatz: Einwahl in das jeweilige Universitäts-VPN
 2. Tool starten
 3.
-	a. Neues Rechercheprojekt anlegen:
-		aa. Projektnamen vergeben
-		bb. Suchbegriffe: einer pro Zeile; wird direkt für die Suche verwendet; Parameter (z.B. "", UND) sind möglich, soweit die ausgewählten Portale diese unterstützen. 
-			Durch Klick auf "Suchbegriffe optimieren" wird das KI-System die Begriffe durch neue Vorschläge ersetzen.
-		cc. Forschungsthema: 1-2 Sätze. Wird als Eingabekontext an das KI-System übergeben, welches die Relevanz eines Beitrags für das Thema einschätzt.
-		dd. Beitragsgliederung: 1 Gliederungspunkte pro Zeile (z.B. "A. Einleitung"). Wird an das KI-System übergeben, um für jeden Gliederungspunkt relevante Abschnitte aus Beiträgen zu identifizieren.
-		ee. Universitätszugang: Die eigene Universität. Die Zugänge werden über jura-recherche.de bzw. die Elektronische Zeitschriftenbibliothek berücksichtigt, um aus Beiträgen der Suchergebnisse Fundstellen aus den Fußnoten über weitere Portale ebenfalls abrufen zu können. Das betrifft auch Portale, die nicht unter dem Punkt "Portale" genannt sind (s. jura-recherche.de für alle unterstützen Portale).
-			Durch Klick auf "Online neu laden" werden die Zugänge von jura-recherche.de neu heruntergeladen und aktualisiert (nur selten erforderlich).
-		ff. Portale: Auf diesen Portalen werden die Suchen mit den Suchbegriffen durchgeführt. Max. 1-2 Ergebnisseiten werden berücksichtigt.
-		gg. Speicherort (Ordner): Dort werden die Links zu den recherchierten Beiträgen abgelegt. Nicht abrufbare oder lesbare Beiträge werden als "CHECK_..."-Dateien gespeichert. "LITERATUR.txt" enthält einen Überblick über die Beiträge und deren Relevanz für das Forschungsthema, kategorisiert nach Gliederungspunkten. "WEITERE-LITERATUR.txt" enthält Fundstellen, die keinem Portal zugeordnet werden konnten und daher nicht abgerufen wurden.
-		hh. Limit an Beiträgen: Die Recherche endet, sobald diese Anzahl an Ergebnissen erreicht wurde. Es sollte mit einem geringen Wert begonnen werden (z.B. 10).
-	b. Bestehende Recherche fortsetzen: Das ausgewählte Projekt wird, soweit möglich, fortgesetzt. Mit "Recherche neu beginnen" kann ein Neustart erzwungen werden.
+- Option 1: Neues Rechercheprojekt anlegen:
+- Projektnamen vergeben
+- Suchbegriffe: einer pro Zeile; wird direkt für die Suche verwendet; Parameter (z.B. "", UND) sind möglich, soweit die ausgewählten Portale diese unterstützen. Durch Klick auf "Suchbegriffe optimieren" wird das KI-System die Begriffe durch neue Vorschläge ersetzen.
+- Forschungsthema: 1-2 Sätze. Wird als Eingabekontext an das KI-System übergeben, welches die Relevanz eines Beitrags für das Thema einschätzt.
+- Beitragsgliederung: 1 Gliederungspunkte pro Zeile (z.B. "A. Einleitung"). Wird an das KI-System übergeben, um für jeden Gliederungspunkt relevante Abschnitte aus Beiträgen zu identifizieren.
+- Universitätszugang: Die eigene Universität. Die Zugänge werden über jura-recherche.de bzw. die Elektronische Zeitschriftenbibliothek berücksichtigt, um aus Beiträgen der Suchergebnisse Fundstellen aus den Fußnoten über weitere Portale ebenfalls abrufen zu können. Das betrifft auch Portale, die nicht unter dem Punkt "Portale" genannt sind (s. jura-recherche.de für alle unterstützen Portale).Durch Klick auf "Online neu laden" werden die Zugänge von jura-recherche.de neu heruntergeladen und aktualisiert (nur selten erforderlich).
+- Portale: Auf diesen Portalen werden die Suchen mit den Suchbegriffen durchgeführt. Max. 1-2 Ergebnisseiten werden berücksichtigt.
+- Speicherort (Ordner): Dort werden die Links zu den recherchierten Beiträgen abgelegt. Nicht abrufbare oder lesbare Beiträge werden als "CHECK_..."-Dateien gespeichert. "LITERATUR.txt" enthält einen Überblick über die Beiträge und deren Relevanz für das Forschungsthema, kategorisiert nach Gliederungspunkten. "WEITERE-LITERATUR.txt" enthält Fundstellen, die keinem Portal zugeordnet werden konnten und daher nicht abgerufen wurden.
+- Limit an Beiträgen: Die Recherche endet, sobald diese Anzahl an Ergebnissen erreicht wurde. Es sollte mit einem geringen Wert begonnen werden (z.B. 10).
+- Option 2: Bestehende Recherche fortsetzen: Das ausgewählte Projekt wird, soweit möglich, fortgesetzt. Mit "Recherche neu beginnen" kann ein Neustart erzwungen werden.
 4. Recherche starten/fortsetzen:
-	a. Login-Aufforderung: Abhängig von den Zugängen der eigenen Universität kann ein Login erforderlich sein. Der Login ist in dem geöffneten Browser-Tab vorzunehmen, dieser Tab sollte nicht geschlossen werden.
-	b. Das Tool führt zunächst auf allen ausgewählten Portalen die Suchen mit allen Suchbegriffen durch.
-	c. Sodann fragt das Tool alle Links aus den Suchergebnissen (1-2 Suchergebnisseiten) ab und fordert vom KI-System eine Einschätzung der Relevanz sowie der relevanten Fußnoten an. Der Link zum Beitrag und die Relevanzeinschätzung werden gespeichert. Die Fußnoten werden ebenfalls in die Liste der weiteren Ergebnisse aufgenommen, soweit die Fundstelle/Zeitschrift einem Portal zugeordnet werden kann.
-	d. "Noch verbleibend" kann zu Beginn geringer sein als das "Limit an Beiträgen". Erst wenn mehr und mehr Fußnoten ausgewertet und aufgenommen werden, steigt der Wert bis zum eingebenen Limit an Beiträgen.
+- Login-Aufforderung: Abhängig von den Zugängen der eigenen Universität kann ein Login erforderlich sein. Der Login ist in dem geöffneten Browser-Tab vorzunehmen, dieser Tab sollte nicht geschlossen werden.
+- Das Tool führt zunächst auf allen ausgewählten Portalen die Suchen mit allen Suchbegriffen durch.
+- Sodann fragt das Tool alle Links aus den Suchergebnissen (1-2 Suchergebnisseiten) ab und fordert vom KI-System eine Einschätzung der Relevanz sowie der relevanten Fußnoten an. Der Link zum Beitrag und die Relevanzeinschätzung werden gespeichert. Die Fußnoten werden ebenfalls in die Liste der weiteren Ergebnisse aufgenommen, soweit die Fundstelle/Zeitschrift einem Portal zugeordnet werden kann.
+- "Noch verbleibend" kann zu Beginn geringer sein als das "Limit an Beiträgen". Erst wenn mehr und mehr Fußnoten ausgewertet und aufgenommen werden, steigt der Wert bis zum eingebenen Limit an Beiträgen.
 
 ![Screenshot](assets/Screenshot2.PNG)
 
@@ -78,9 +76,9 @@ Zwischen jeder Abfrage liegen mehrere Sekunden, um ein schonendes Crawling siche
 2. Tool starten
 3. Juristische Fragestellung eingeben, Universität und Portal auswählen.
 4. Antwort erhalten:
-	a. Das Tool fragt das KI-System nach einem passenden Suchbegriff.
-	b. Die Suche wird durchgeführt.
-	c. Der Text aus dem ersten Suchergebnis (d.h. ein Beitrag) wird an das KI-System übergeben.
-	d. Das KI-System gibt eine Antwort unter Berücksichtigung des Beitrags (oder ohne, sofern kein passender gefunden werden konnte) zurück.
+- Das Tool fragt das KI-System nach einem passenden Suchbegriff.
+- Die Suche wird durchgeführt.
+- Der Text aus dem ersten Suchergebnis (d.h. ein Beitrag) wird an das KI-System übergeben.
+- Das KI-System gibt eine Antwort unter Berücksichtigung des Beitrags (oder ohne, sofern kein passender gefunden werden konnte) zurück.
 
 ![Screenshot](assets/Screenshot3.PNG)
