@@ -9,7 +9,7 @@ import threading
 from tkinter import messagebox
 from urllib.parse import urlparse
 from playwright.sync_api import sync_playwright
-#from googlesearch import search
+from googlesearch import search
 import urllib.parse
 import requests
 from pdf2image import convert_from_bytes
@@ -35,7 +35,7 @@ class lawResearchAI:
                 {
                     "baseurl":"https://beck-online.beck.de",
                     "url":"https://beck-online.beck.de/Search?pagenr=__PAGENR__&words=__Q__&st=&searchid=",
-                    "findLinksByClass":"treffer-firstline-text",
+                    "findLinksByParentClass":"treffer-firstline-text",
                     "resultsPerPage":20,
                 },
             "google-search":
@@ -58,7 +58,7 @@ class lawResearchAI:
         self.aiModel = aiModel;
         
         if tesseractPath and popplerPath:
-            pytesseract.pytesseract.tesseract_cmd = tesseractPath+"tesseract.exe"
+            pytesseract.pytesseract.tesseract_cmd = os.path.join(tesseractPath, "tesseract.exe")
             self.popplerPath = popplerPath
         
         
@@ -216,7 +216,6 @@ class lawResearchAI:
     def research(self, projectDir, topic, topicSentence, topicStructure, searchKeywords, portalsSelected, jurisAutoLogin, stopSignal, resumeSearchOption=False):
         self.callbackFunction(-1, "Suche beginnt . . .")
         
-        # Projekt aus Datei laden -> verdrängt übergebene Variablen
         self.topic = topic
         
         self.count = [0, 0, 0, 0] # [0] durchgeführte Suchen, [1] durchgeführte Dokumentabrufe, [2] durchgeführte AI-API-Requests, [3] error-Dateibezeichnungen
@@ -310,7 +309,7 @@ class lawResearchAI:
                     break
                 
                 time.sleep(self.requestBreak)
-                
+            
             # 2. Schritt: Dokumente abarbeiten
             while 1==1:
                 if len(self.sourcesProcessed) >= self.maxSources:
@@ -324,25 +323,21 @@ class lawResearchAI:
                     self.callbackFunction(-1, "Alle Ergebnisse wurden verarbeitet. Beenden.")
                     self.saveSearch()
                     break
-                #elif self.allSearchesProcessed:
-                    # Endlosschleife und damit Thread 2 beenden
-                #    break
-                
+                                
                 sleep_time = self.requestBreak
                 while sleep_time > 0:
                     if stopSignal.is_set():
                         self.saveSearch()
-                        break
+                        
+                        # Browser schließen
+                        self.playwright["browser"].close()
+                        
+                        return True
                         
                     # Schlaf für das kleine Intervall
                     time.sleep(0.1)
                     sleep_time -= 0.1     
                 
-                if stopSignal.is_set():
-                    self.saveSearch()
-                    break
-            
-            
             # Browser am Ende schließen
             self.playwright["browser"].close()
     
@@ -358,7 +353,7 @@ class lawResearchAI:
             and key != "playwright"  # Schließt 'playwright' aus
         }
         
-        with open(os.path.join(parent_folder_path, f"project{self.safe_string_for_filename(self.topic)}.json"), "w", encoding="utf-8") as f:
+        with open(os.path.join(parent_folder_path, f"project{self.escapeFilename(self.topic)}.json"), "w", encoding="utf-8") as f:
             json.dump(serializable_dict, f)
     
     # Gespeicherte Suche aus Datei laden
@@ -367,7 +362,7 @@ class lawResearchAI:
         parent_folder_path = os.path.dirname(current_script_path)
         
         try:
-            with open(os.path.join(parent_folder_path, f"project{self.safe_string_for_filename(self.topic)}.json"), "r", encoding="utf-8") as f:
+            with open(os.path.join(parent_folder_path, f"project{self.escapeFilename(self.topic)}.json"), "r", encoding="utf-8") as f:
                 self.__dict__.update(json.load(f))
                 return True
         
@@ -382,7 +377,7 @@ class lawResearchAI:
             # Google Suche durchführen
             query = urllib.parse.unquote(searchURL)+" filetype:pdf"
             
-            '''TODO!for tURL in search(query, num_results=20):
+            for tURL in search(query, num_results=20):
                 if not tURL:
                     continue
                 
@@ -392,7 +387,7 @@ class lawResearchAI:
                 else:
                     # URL aufnehmen, wenn nicht bereits in der Liste
                     if tURL not in self.searchResultsURLs and tURL not in self.sourcesProcessed:
-                        self.searchResultsURLs.append(tURL+"?PDF")'''
+                        self.searchResultsURLs.append(tURL+"?PDF")
         else:
             # Alle anderen Portale
             response = self.req(searchURL)
@@ -408,12 +403,20 @@ class lawResearchAI:
 
             # Alle relevanten Links extrahieren
             if (self.portals[portal]):
-                if (self.portals[portal]["findLinksByClass"]):
-                    # Links durch Klasse finden (insb. Beck Online)
+                if ("findLinksByClass" in self.portals[portal] or "findLinksByParentClass" in self.portals[portal]):
+                    # Links bei einigen Portalen durch Klasse (oder Elternklasse) finden
                     
-                    # Finden aller Links-Elemente mit entsprechender Klasse
-                    elements = soup.find_all('a', href=True, class_=self.portals[portal]["findLinksByClass"])
-                    
+                    if ("findLinksByClass" in self.portals[portal]):
+                        # Finden aller Links-Elemente mit entsprechender Klasse
+                        elements = soup.find_all('a', href=True, class_=self.portals[portal]["findLinksByClass"])
+                    elif ("findLinksByParentClass" in self.portals[portal]):
+                        # Finden aller Links-Elemente mit entsprechender Elternklasse
+                        elements = []
+                        for p in soup.find_all('p', class_=self.portals[portal]["findLinksByParentClass"]):
+                            a = p.find('a', href=True)
+                            if a:
+                                elements.append(a)
+                                
                     # Links extrahieren und übernehmen
                     targetURLs = []
                     tURL = ""
@@ -557,7 +560,7 @@ class lawResearchAI:
                         "content": f"Du bist der beste Rechtswissenschaftler und schreibst einen juristischen Aufsatz zu dem Thema {self.topic}."
                                    f"{self.topicSentence} "
                                    f"{'Der Aufsatz enthält folgende Gliederungsebenen: ' + self.topicStructure + '.' if self.topicStructure else ''}"
-                                   f"Vor diesem Hintergrund sichtest du den folgenden Text. Gib mir im JSON-Format folgende vier Parameter aus: 0. file: Kurzbezeichnung als Dateiname ohne Endung (z.B.: GRUR2020,1) 1. relevance: 0-3 (0: gar nicht (z.B. nur Wiedergabe des Gesetzeswortlauts und kein Aufsatz o.ä.), 1: kaum relevant (z.B. sehr kurze Quelle, überblicksartige Kommentierung), 2: Durchschnitt (im Zweifel anzunehmen), 3: nur selten von Dir anzunehmen, sehr hohe Relevanz für konkretes Thema anhand der Schlagworte und langer, tiefgehender Beitrag) für Relevanz des Textes für deinen Aufsatz. 2. relevantparas: Verweise auf relevante Stellen des Textes (d.h. Seitenzahl oder Rn.) zugeordnet zum jeweiligen Gliederungspunkt des Aufsatzes. 3. additionalsources: für das Thema besonders relevante, einzigartige Quellen (keine §§; nur Rechtsprechung und Literatur; max. 10 Quellen) im Zitierformat ohne Autorname (z.B. GRUR 2020, 1); die Relevanz beurteilst du anhand des Titels und ggf. des Texts, der sich vor der jeweiligen Fußnote findet.\n###\n{text}"
+                                   f"Vor diesem Hintergrund sichtest du den folgenden Text. Gib mir im JSON-Format folgende vier Parameter aus: 0. file: Kurzbezeichnung als Dateiname ohne Endung (z.B.: GRUR2020,1) 1. relevance: 0-3 (0: gar nicht (z.B. nur Wiedergabe des Gesetzeswortlauts und kein Aufsatz o.ä.), 1: kaum relevant (z.B. sehr kurze Quelle, überblicksartige Kommentierung), 2: Durchschnitt (im Zweifel anzunehmen), 3: nur selten von Dir anzunehmen, sehr hohe Relevanz für konkretes Thema anhand der Schlagworte und langer, tiefgehender Beitrag) für Relevanz des Textes für deinen Aufsatz. 2. relevantparas: Verweise auf relevante Stellen des Textes (d.h. Seitenzahl oder Rn.) zugeordnet zum jeweiligen Gliederungspunkt des Aufsatzes. 3. additionalsources: für das Thema besonders relevante, einzigartige Quellen (keine §§; nur Rechtsprechung und Literatur; max. 10 Quellen) im Zitierformat und OHNE Autorenbezeichnung (z.B.: GRUR 2020, 1); die Relevanz beurteilst du anhand des Titels und ggf. des Texts, der sich vor der jeweiligen Fußnote findet.\n###\n{text}"
                     }
                 ]
             )
@@ -572,10 +575,10 @@ class lawResearchAI:
                 
                 # Text entsprechend Relevanz speichern bzw. Link anlegen
                 if (self.sourcesDownload):
-                    with open(f"{self.projectDir}\\{completion['relevance']}_{self.safe_string_for_filename(completion['file'])}.html", 'w', encoding='utf-8') as file:
+                    with open(f"{self.projectDir}\\{completion['relevance']}_{self.escapeFilename(completion['file'])}.html", 'w', encoding='utf-8') as file:
                         file.write(f"<base href=\"{base_url}\" />{response["text"]}")
                 else:
-                    with open(f"{self.projectDir}\\{completion['relevance']}_{self.safe_string_for_filename(completion['file'])}.url", 'w', encoding='utf-8') as file:
+                    with open(f"{self.projectDir}\\{completion['relevance']}_{self.escapeFilename(completion['file'])}.url", 'w', encoding='utf-8') as file:
                         file.write(f"[InternetShortcut]\nURL={url}\n")                    
 
                 
@@ -634,13 +637,13 @@ class lawResearchAI:
         else:
             # Kein Text gefunden -> Dann gesamte Seite abspeichern
             if (self.sourcesDownload):
-                with open(f"{self.projectDir}\\CHECK_{self.safe_string_for_filename(str(uuid.uuid4().hex[:8]))}.html", 'w', encoding='utf-8') as file:
+                with open(f"{self.projectDir}\\CHECK_{self.escapeFilename(str(uuid.uuid4().hex[:8]))}.html", 'w', encoding='utf-8') as file:
                     file.write(f"<base href=\"{base_url}\" />{response["text"]}")
             else:
-                with open(f"{self.projectDir}\\CHECK_{self.safe_string_for_filename(str(uuid.uuid4().hex[:8]))}.url", 'w', encoding='utf-8') as file:
+                with open(f"{self.projectDir}\\CHECK_{self.escapeFilename(str(uuid.uuid4().hex[:8]))}.url", 'w', encoding='utf-8') as file:
                     file.write(f"[InternetShortcut]\nURL={url}\n")  
         
-    def safe_string_for_filename(self, value):
+    def escapeFilename(self, value):
         # Entfernt alle unerlaubten Zeichen (und auch Leerzeichen) durch einen regulären Ausdruck
         # Erlaubte Zeichen sind Buchstaben, Zahlen, Bindestriche und Unterstriche
         safe_string = re.sub(r'[\/:*?"<>|\s]', '_', value)
@@ -683,6 +686,8 @@ class lawResearchAI:
         
     def reqPDF(self, url, ref=False):
         # Lädt eine PDF-Datei und wandelt diese in einen Text um
+        self.callbackFunction(-1, f"Quelle wird heruntergeladen und mittels OCR bearbeitet: {url[:50]} . . .")
+        
         try:
             headers = {"Referer": ref} if ref else {}
             response = requests.get(url, headers=headers)

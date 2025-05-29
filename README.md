@@ -3,7 +3,8 @@ Das Tool ermöglicht die KI-gestützte juristische Recherche. Anhand von vorgege
 Die geladenen Quellen werden KI-gestützt auf deren Relevanz insgesamt (1-3) und für einzelne Gliederungspunkte ausgewertet. Außerdem werden besonders relevante Fußnoten aus dem Dokument ausgelesen und ebenfalls berücksichtigt.
 Alle Dateien werden als Links sowie ein Literatur-Überblick als .txt im gewählten Projektordner gespeichert.
 
-JuraRechercheKI ist in der BETA-Version und soll vor allem die Innovationspotenziale in der Rechtswissenschaft aufzeigen, wie sie dargelegt wurden in der Abhandlung ZGE 17 (2025), 1 (https://www.mohrsiebeck.com/artikel/das-urheberrecht-als-kiinnovationsbremse-in-der-rechtswissenschaft-101628zge-2025-0002/).
+**BETA-Version und Zweck**
+JuraRechercheKI ist in der BETA-Version, kann noch diverse Bugs und Ungereimtheiten enthalten und soll vor allem die Innovationspotenziale in der Rechtswissenschaft aufzeigen, wie sie dargelegt wurden in der Abhandlung ZGE 17 (2025), 1 (https://www.mohrsiebeck.com/artikel/das-urheberrecht-als-kiinnovationsbremse-in-der-rechtswissenschaft-101628zge-2025-0002/).
 
 ![Screenshot](assets/Screenshot1.PNG)
 

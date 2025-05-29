@@ -111,11 +111,26 @@ proxy_var = tk.StringVar(value=script_settings["PROXY_URL"])
 poppler_path_var = tk.StringVar(value=script_settings["POPPLER_PATH"])
 tesseract_path_var = tk.StringVar(value=script_settings["TESSERACT_PATH"])
 
-frameElements["research_project"]["restart_var"] = tk.BooleanVar(value=False)
+frameElements["research_project"]["resume_var"] = tk.BooleanVar(value=False)
 
 project_name_var = tk.StringVar()
 limit_var = tk.IntVar(value=10)
 uni_var = tk.StringVar()
+
+# Hilfsfunktion zum Escapen
+def escape_filename(value):
+    # Entfernt alle unerlaubten Zeichen (und auch Leerzeichen) durch einen regulären Ausdruck
+    # Erlaubte Zeichen sind Buchstaben, Zahlen, Bindestriche und Unterstriche
+    safe_string = re.sub(r'[\/:*?"<>|\s]', '_', value)
+    
+    # Optionale Anpassungen, um sicherzustellen, dass der Dateiname nicht mit Punkt oder Leerzeichen beginnt/endet
+    safe_string = safe_string.strip().strip('.').strip()
+
+    max_length = 255
+    safe_string = safe_string[:max_length]
+
+    # Rückgabe des umgewandelten, sicheren Strings
+    return safe_string 
 
 # Projekte laden
 def load_projects():
@@ -155,17 +170,21 @@ def load_project_data(*args):
             var.set(portal in data.get("selected_portals", []))
         frameElements["research_project"]["limit_var"].set(data.get("limit", 10))
         frameElements["research_project"]["save_location_var"].set(data.get("save_location", ""))
-        
-        frameElements["research_project"]["research_button"].configure(text="Recherche fortsetzen")
-        
-    else:
-        frameElements["research_project"]["research_button"].configure(text="Recherche starten")
 
 def delete_project():
     project_name = project_name_var.get()
     if project_name in projects:
+        # Übersicht aktualisieren
         del projects[project_name]
         save_projects(projects)
+        
+        # Projektstand löschen
+        project_path = os.path.join(scriptDir, f"project{escape_filename(project_name)}.json")
+        
+        if os.path.exists(project_path):
+            os.remove(project_path)
+        
+        # Layout aktualisieren
         frameElements["research_project"]["project_dropdown"]["values"] = list(projects.keys())
         project_name_var.set("")
         frameElements["research_project"]["search_entry"].delete("1.0", tk.END)
@@ -216,7 +235,7 @@ def search_action():
             messagebox.showerror("Fehler", "Es wurden nicht alle benötigten Felder ausgefüllt.")
     elif (status == 1):
         # Recherche beenden
-        frameElements["research_project"]["research_button"].configure(text="Recherche fortsetzen")
+        frameElements["research_project"]["research_button"].configure(text="Recherche starten")
         frameElements["research_project"]["optimize_button"].configure(state="normal")
         frameElements["research_project"]["progress_label"].config(text="")
         frameElements["research_project"]["progress_bar"].stop()
@@ -237,6 +256,9 @@ def search():
     selected_uni = get_key_from_value(frameElements["research_project"]["uni_dropdown"].get(), unis)
     limit = frameElements["research_project"]["limit_var"].get()
     save_location = frameElements["research_project"]["save_location_var"].get()
+    
+    # Stopp-Signal zurücksetzen
+    stopSignal.clear()
     
     # Projekt speichern
     project_name = project_name_var.get()
@@ -264,10 +286,10 @@ def search():
         research_topic = convert_text_to_json(research_topic)
         outline = convert_text_to_json(outline)
         search_query = convert_text_to_json(search_query)
-        resumeSearch = True if frameElements["research_project"]["restart_var"].get() == 0 else False
+        resumeSearch = True if frameElements["research_project"]["resume_var"].get() == 1 else False
        
         # Neubeginn-Checkbox zurücksetzen
-        frameElements["research_project"]["restart_var"].set(False)
+        frameElements["research_project"]["resume_var"].set(False)
        
         uniAccess = []
        
@@ -286,6 +308,12 @@ def search():
 
 # Callback-Funktion ab Durchführung der Recherche, die die Statusleiste aktualisiert
 def search_action_callback(percent, status_text):
+    global stopSignal
+    
+    if stopSignal.is_set():
+        # Callback ignorieren, wenn Projekt gerade beendet wird, um den Nutzer nicht zu verwirren
+        return None
+    
     if (percent >= 0):
         frameElements["research_project"]["progress_var"].set(percent)
     
@@ -360,9 +388,8 @@ def update_universities():
     if response.status_code == 200:
         with open(portals_file, "wb", encoding="utf-8") as f:
             f.write(response.content)
-        print(f"Datei gespeichert: {portals_file}")
     else:
-        print(f"Fehler beim Download der Datei: {portals_url}")
+        messagebox.showerror("Fehler", f"Versuche es später erneut. Fehler beim Download der Datei: {portals_url}")
 
     # 2. Lade unis.json und speichere sie
     unis_file = os.path.join(download_folder, "unis.json")
@@ -370,9 +397,8 @@ def update_universities():
     if response.status_code == 200:
         with open(unis_file, "wb", encoding="utf-8") as f:
             f.write(response.content)
-        print(f"Datei gespeichert: {unis_file}")
     else:
-        print(f"Fehler beim Download der Datei: {unis_url}")
+        messagebox.showerror("Fehler", f"Versuche es später erneut. Fehler beim Download der Datei: {unis_url}")
 
     # 3. Lese unis.json aus und lade für jeden Key die key.json
     with open(unis_file, "r", encoding="utf-8") as f:
@@ -386,9 +412,8 @@ def update_universities():
         if response.status_code == 200:
             with open(key_file, 'wb') as f:
                 f.write(response.content)
-            print(f"Datei gespeichert: {key_file}")
         else:
-            print(f"Fehler beim Download der Datei: {key_url}")
+            messagebox.showerror("Fehler", f"Versuche es später erneut. Fehler beim Download der Datei: {key_url}")
     
     # Ladeanzeige ausblenden
     frameElements["research_project"]["progress_label"].config(text="")
@@ -437,11 +462,11 @@ def create_research_project_frame():
     # Zusätzlich ein Ereignis für die Validierung, um manuelle Eingaben zu erkennen
     project_dropdown.bind("<FocusOut>", load_project_data) 
 
-    delete_button = ttk.Button(project_frame, text="Löschen")
+    delete_button = ttk.Button(project_frame, text="Löschen", command=delete_project)
     delete_button.grid(row=0, column=2, padx=5, pady=5)
     frameElements["research_project"]["delete_button"] = delete_button
 
-    restart_checkbox = ttk.Checkbutton(project_frame, text="Recherche neu beginnen", variable=frameElements["research_project"]["restart_var"])
+    restart_checkbox = ttk.Checkbutton(project_frame, text="Recherche fortsetzen", variable=frameElements["research_project"]["resume_var"])
     restart_checkbox.grid(row=0, column=3, padx=5, pady=5)
     frameElements["research_project"]["restart_checkbox"] = restart_checkbox
 
@@ -521,7 +546,7 @@ def create_research_project_frame():
     limit_entry.grid(row=7, column=1, padx=5, pady=5, sticky="w")
     
     # Hinweis zur Verwendung
-    copyright_label = ttk.Label(main_frame, wraplength=300, text="Ja, ich habe die urheberrechtlichen Hinweise zur Nutzung (README) gelesen und nutze das Tool nur für wissenschaftliche Forschungszwecke.")
+    copyright_label = ttk.Label(main_frame, wraplength=300, text="Ja, ich habe die urheberrechtlichen Hinweise zur Nutzung (README) gelesen und nutze das Tool für zulässige Zwecke (z.B. wissenschaftliche Forschungszwecke).")
     copyright_label.grid(row=8, column=1, padx=5, pady=5, sticky="w")
     
     # Buttons
