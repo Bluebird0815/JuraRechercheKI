@@ -12,3 +12,4 @@ venv/
 .env/
 .venv/
 env/
+last_uni.json
