@@ -20,7 +20,7 @@ class lawResearchAI:
     def __init__(self, journalsAccess, maxSources, callbackFunction, aiBaseURL, aiAPIKey, aiModel, proxyURL, tesseractPath="", popplerPath=""):
         self.OAIClient = OpenAI(
             base_url=aiBaseURL,
-            api_key=aiAPIKey,
+            api_key=aiAPIKey if aiAPIKey else "none",
         )
                
         # Zentrale Einstellungen
@@ -547,7 +547,7 @@ class lawResearchAI:
             
             # OpenAI-API -> Relevanz in Prozent einordnen; relevante weiterführende Quellen
             completionReq = self.OAIClient.chat.completions.create(
-                model="gpt-4o-mini",#model="gpt-4o",#
+                model=self.aiModel,
                 max_completion_tokens=12000,
                 #response_format: {"type":"json_schema","json_schema":{"strict":true,"schema": ...} },
                 messages=[

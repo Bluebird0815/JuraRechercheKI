@@ -43,8 +43,8 @@ Zwischen jeder Abfrage liegen mehrere Sekunden, um ein schonendes Crawling siche
 **Einrichtung**
 1. Tool starten
 2. Es öffnet sich der Tab "Einstellungen". Hier sind anzugeben:
-	a. OpenAI-API-URL: Hier kann jede beliebige URL angegeben werden, die auf Basis der OpenAI-API-Struktur basiert. Das ermöglicht z.B. den lokalen Einsatz von OLlama.
-	b. OpenAI-API-Key: Sofern ein Key benötigt wird, ist er hier anzugeben.
+	a. OpenAI-API-URL: Hier kann jede beliebige URL angegeben werden, die auf Basis der OpenAI-API-Struktur basiert (endet mit "/v1"). Das ermöglicht z.B. den lokalen Einsatz von Ollama (z.B. http://localhost:11434/v1).
+	b. OpenAI-API-Key: Sofern ein Key benötigt wird, ist er hier anzugeben (z.B. leer zu lassen bei Ollama).
 	c. Proxy-URL: Sofern die jeweilige Universität einen Proxy benötigt, kann dieser hier angegeben werden. Z.B. https://proxy.universitaet.de:8000
 	d. (Optional, benötigt für Google PDF-Suche): Pfad zum Programm Poppler (PDF Verarbeitung), s. https://github.com/oschwartz10612/poppler-windows/releases
 	e. (Optional, benötigt für Google PDF-Suche): Pfad zum Programm Tesseract (OCR), s. https://github.com/UB-Mannheim/tesseract/wiki

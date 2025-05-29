@@ -255,9 +255,6 @@ def search():
         
     save_last_uni(frameElements["research_project"]["uni_dropdown"].get())
     
-    # Neubeginn-Checkbox zurücksetzen
-    frameElements["research_project"]["restart_var"].set(False)
-    
     # Portale nach Speicherung des Projekts den Werten zuordnen
     selected_portals = [portals.get(portal, portal) for portal in selected_portals]
     
@@ -268,6 +265,9 @@ def search():
         outline = convert_text_to_json(outline)
         search_query = convert_text_to_json(search_query)
         resumeSearch = True if frameElements["research_project"]["restart_var"].get() == 0 else False
+       
+        # Neubeginn-Checkbox zurücksetzen
+        frameElements["research_project"]["restart_var"].set(False)
        
         uniAccess = []
        
