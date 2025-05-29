@@ -1,0 +1,7 @@
+/Include/
+/Lib/
+/Scripts/
+.env
+pyvenv.cfg
+projects.json
+project*.json
