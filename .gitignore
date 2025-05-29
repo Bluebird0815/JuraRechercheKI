@@ -5,3 +5,10 @@
 pyvenv.cfg
 projects.json
 project*.json
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env/
+.venv/
+env/
