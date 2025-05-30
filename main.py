@@ -646,7 +646,7 @@ def create_settings_frame():
     api_model_entry.grid(row=3, column=1, padx=5, pady=5, sticky="w")
     frameElements["settings"]["api_model_entry"] = api_model_entry
 
-    proxy_label = ttk.Label(settings_frame, text="Proxy:")
+    proxy_label = ttk.Label(settings_frame, text="Proxy (optional):")
     proxy_label.grid(row=4, column=0, padx=5, pady=5, sticky="w")
 
     proxy_entry = ttk.Entry(settings_frame, textvariable=proxy_var, width=50)

@@ -524,19 +524,20 @@ class lawResearchAI:
             # Extrahieren des Textes
             text = ""
             
-            if (url.startswith("https://beck-online.beck.de")):
+            if (url.startswith(self.portals["beck-online"]["baseurl"])):
                 # Beck Online
                 element = soup.find('div', class_='dokcontent')  # Finde ein spezifisches Element
                 if element:
-                    text = element.get_text(separator='\n', strip=True)
-            elif ("juris.de/" in url):
+                    text = element.get_text(separator='\n', strip=True)                
+            elif (url.startswith(self.portals["juris"]["baseurl"])):
                 # juris
                 element = soup.find('div', class_='doc-sheet')  # Finde ein spezifisches Element
                 if element:
                     text = element.get_text(separator='\n', strip=True)
-            else:
+            
+            if not text:
                 # Andere
-                soup.get_text(separator='\n', strip=True)
+                text = soup.get_text(separator='\n', strip=True)
             
         if text:
             # Text gefunden -> Auswerten

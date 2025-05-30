@@ -16,12 +16,16 @@ Das deutsche Urheberrecht erlaubt Text und Data Mining für wissenschaftliche Fo
 
 JuraRechercheKI selbst legt keine dauerhaften Vervielfältigungen an. Es benötigt im Einsatz nur temporäre Vervielfältigungen und legt lediglich Links zu den jeweiligen Dokumenten dauerhaft im Projektordner ab. Abhängig davon, welche KI-Schnittstelle zum Einsatz kommt, kann es zu weiteren, dauerhaften Vervielfältigungen kommen.
 
-Das Tool ist vor diesem Hintergrund nur für wissenschaftliche Forschungszwecke vorgesehen. Die urheberrechtliche Zulässigkeit bedarf einer Prüfung im Einzelfall unter Berücksichtigung der Nutzungshandlungen (z.B. Vervielfältigungen in Abhängigkeit von der gewählten KI-Schnittstelle).
+Das Tool ist vor diesem Hintergrund daher vor allem für wissenschaftliche Forschungszwecke vorgesehen. Die urheberrechtliche Zulässigkeit bedarf einer Prüfung im Einzelfall unter Berücksichtigung der Nutzungshandlungen (z.B. Vervielfältigungen in Abhängigkeit von der gewählten KI-Schnittstelle).
 
 Zwischen jeder Abfrage liegen mehrere Sekunden, um ein schonendes Crawling sicherzustellen.
 
+**Anforderungen**
+1. Zugang zu juristischen Datenbanken. Unterstützt werden sämtlich Login-Formen (Proxy/VPN, individueller Login), solange die Datenbank-URLs unverändert bleiben. Sofern sich die Datenbank-URLs ändern (z.B. datenbank.eaccess.universitaet.de) sind die entsprechenden URLs ganz oben in der lawResearch.py zu ersetzen (s. dort die self.portals).
+2. Ca. < 300 MB Speicherplatz und wenige Minuten Installationszeit (s. die notwendige Befehle und Downloads unten).
+
 **Installation**
-1. Code herunterladen und an geeigneter Stelle (z.B. Dokumente) entpacken.
+1. Code [herunterladen](https://github.com/Bluebird0815/JuraRechercheKI/archive/refs/heads/main.zip) und an geeigneter Stelle (z.B. im Ordner Dokumente) entpacken.
 2. [Python installieren](https://www.python.org/downloads/)
 3. Abhängigkeiten (und Playwright Browser) installieren.
 - Windows:
