@@ -30,7 +30,7 @@ Zwischen jeder Abfrage liegen mehrere Sekunden, um ein schonendes Crawling siche
 3. Abhängigkeiten (und Playwright Browser) installieren.
 - Windows (in der geöffneten Eingabeaufforderung):
 	
-		```bash
+		```
 		cd pfad
 		pip install -r requirements.txt
 		playwright install chromium
@@ -38,12 +38,12 @@ Zwischen jeder Abfrage liegen mehrere Sekunden, um ein schonendes Crawling siche
 
 - Linux
 		
-		```bash
+		```
 		cd pfad-zum-ordner
 		pip3 install -r requirements.txt
 		playwright install chromium
 		```
-4. Programm starten
+4. Programm starten: z.B. über die Eingabeaufforderung (python PFAD\main.py) oder per Rechtsklick auf die main.py > Öffnen mit > Python.
 
 **Einrichtung**
 1. Tool starten
