@@ -28,7 +28,7 @@ Zwischen jeder Abfrage liegen mehrere Sekunden, um ein schonendes Crawling siche
 1. Code [herunterladen](https://github.com/Bluebird0815/JuraRechercheKI/archive/refs/heads/main.zip) und an geeigneter Stelle (z.B. im Ordner Dokumente) entpacken.
 2. [Python installieren](https://www.python.org/downloads/)
 3. Abhängigkeiten (und Playwright Browser) installieren.
-- Windows:
+- Windows (in der geöffneten Eingabeaufforderung):
 	
 		```bash
 		cd pfad
